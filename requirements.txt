@@ -1,0 +1,4 @@
+mcp>=1.28,<2
+huggingface_hub>=0.30
+fastapi>=0.115
+uvicorn>=0.30

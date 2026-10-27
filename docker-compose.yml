@@ -1,0 +1,50 @@
+services:
+  model-ui:
+    build: .
+    command: ["python", "server.py", "ui"]
+    environment:
+      COMFYUI_MODELS: /models
+      CIVITAI_TOKEN: ${CIVITAI_TOKEN:-}
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes:
+      - ${COMFYUI_MODELS_HOST:-./models}:/models
+    ports:
+      - "8765:8765"
+    restart: unless-stopped
+
+  model-mcp:
+    build: .
+    command: ["python", "server.py", "mcp-http"]
+    environment:
+      COMFYUI_MODELS: /models
+      CIVITAI_TOKEN: ${CIVITAI_TOKEN:-}
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes:
+      - ${COMFYUI_MODELS_HOST:-./models}:/models
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  comfyui:
+    image: yanwk/comfyui-boot:cu130-slim-v2
+    pull_policy: missing
+    environment:
+      CLI_ARGS: "--listen 0.0.0.0"
+      HF_TOKEN: ${HF_TOKEN:-}
+    volumes:
+      - ${COMFYUI_MODELS_HOST:-./models}:/root/ComfyUI/models
+      - ${COMFYUI_DATA_HOST:-./comfyui-data}/input:/root/ComfyUI/input
+      - ${COMFYUI_DATA_HOST:-./comfyui-data}/output:/root/ComfyUI/output
+      - ${COMFYUI_DATA_HOST:-./comfyui-data}/custom_nodes:/root/ComfyUI/custom_nodes
+      - ${COMFYUI_DATA_HOST:-./comfyui-data}/user:/root/ComfyUI/user
+      - ${COMFYUI_DATA_HOST:-./comfyui-data}/cache:/root/.cache
+    ports:
+      - "8189:8188"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
