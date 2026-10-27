@@ -8,7 +8,7 @@ Connect using MCP Streamable HTTP at `http://<owner-tailscale-ip>:8000/mcp`. The
 
 Available tools:
 
-- `download_comfyui_model(repo_id, filename, category, revision="main")` downloads one named Hugging Face weight file. Use `repo_id` as `owner/repository`, `filename` as the exact repository path, `category` as one of `checkpoints`, `diffusion_models`, `text_encoders`, `vae`, `loras`, or `upscale_models`.
+- `download_comfyui_model(repo_id, filename, category, revision="main")` downloads one named Hugging Face weight file. Use `repo_id` as `owner/repository`, `filename` as the exact repository path, `category` as one of `checkpoints`, `diffusion_models`, `text_encoders`, `vae`, `loras`, `upscale_models`, `clip_vision`, or `background_removal`.
 - `download_civitai_comfyui_model(version_id, category, filename="")` downloads the primary file from one Civitai model version. Use the numeric **model version ID** from the version page or API, not the model page ID. `filename` is an optional local filename override; leave it empty to use Civitai's response filename.
 
 After a successful tool call, report the installed path and tell the user to refresh ComfyUI's model list or restart ComfyUI. Do not guess model versions or category; ask when unclear. Respect each model's license and the user's usage rights.
